@@ -1,6 +1,6 @@
 {
   "name": "uservices-socket.io-server",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Deploy remote proxies of services on the server via socket.io",
   "main": "dist/lib/index.js",
   "repository": "christyharagan/uservices-socket.io-server",
@@ -26,7 +26,7 @@
   "dependencies": {
     "rx": "^2.5.3",
     "socket.io": "^1.3.5",
-    "typescript-schema": "^0.2.0",
-    "uservices": "^0.2.0"
+    "typescript-schema": "^0.3.0",
+    "uservices": "^0.3.0"
   }
 }
