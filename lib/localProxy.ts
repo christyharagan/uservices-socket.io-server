@@ -1,24 +1,25 @@
-import {visitSpec, Spec} from 'uservices'
+import {visitService, Service} from 'uservices'
 import {Observer, Observable} from 'rx'
 import * as s from 'typescript-schema'
 
-export function createLocalProxy<T>(server: SocketIO.Server, serviceSchema: Spec, service: T) {
+export function createLocalProxy<T>(server: SocketIO.Server|SocketIO.Namespace, serviceSpec: Service<any, any>, service: T) {
   server.on('connection', function(socket) {
-    visitSpec({
-      onPromise: function(memberSchema){
+    visitService(serviceSpec, {
+      onMethod: function(memberSchema) {
         let name = memberSchema.name
         let func = service[name]
-        socket.on(name, function(args: any[], cb: (value?: any, error?: any) => void) {
+        socket.on(serviceSpec.name + '/' + name, function(args: any[], cb: (value?: any, error?: any) => void) {
           (<Promise<any>>func.apply(service, args)).then(cb).catch(cb.bind(null, null))
         })
       },
-      onObservable: function(memberSchema){
-        let name = memberSchema.name
-        let event = service[name]
+      onEvent: function(memberSchema) {
+        let name = serviceSpec.name + '/' + memberSchema.name
+        let event = service[memberSchema.name]
         socket.on(name, function(args: any[], cb: (id: string) => void) {
           let id = String(Date.now())
           socket.once(name + id, function() {
-            (<Observable<any>>event.apply(service, args)).subscribe(
+            let observable = <Observable<any>>event.apply(service, args)
+            observable.subscribe(
               function(value) {
                 socket.emit(name + id, [value])
               },
@@ -33,6 +34,6 @@ export function createLocalProxy<T>(server: SocketIO.Server, serviceSchema: Spec
           cb(id)
         })
       }
-    }, /*Type Hack*/ <s.Class> serviceSchema)
+    })
   })
 }

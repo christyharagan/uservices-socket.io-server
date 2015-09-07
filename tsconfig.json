@@ -11,11 +11,16 @@
         "target": "es5",
         "outDir": "./dist"
     },
+    "formatCodeOptions": {
+        "indentSize": 2,
+        "tabSize": 2
+    },
     "filesGlob": [
         "./lib/**/*.ts",
         "./typings/**/*.d.ts",
         "./node_modules/*/*.d.ts",
         "./node_modules/rx/ts/rx.d.ts",
+        "./node_modules/typescript/bin/typescript.d.ts",
         "./uservices-socket.io-server.d.ts"
     ],
     "compileOnSave": true,
@@ -29,6 +34,7 @@
         "./node_modules/typescript-schema/typescript-schema.d.ts",
         "./node_modules/uservices/uservices.d.ts",
         "./node_modules/rx/ts/rx.d.ts",
+        "./node_modules/typescript/bin/typescript.d.ts",
         "./uservices-socket.io-server.d.ts"
     ]
 }
